@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import "../styles/Board.css";
 import Node from "./Node";
 
 const Board = () => {
@@ -11,7 +11,7 @@ const Board = () => {
   const FINISH_NODE_COL = 35;
 
   const handleMouseDown = (row, col) => {
-    const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
+    const newGrid = getNewGridWithWallToggled(grid, row, col);
     // this.setState({ grid: newGrid, mouseIsPressed: true });
 
     setGrid(newGrid);
@@ -19,8 +19,8 @@ const Board = () => {
   };
 
   const handleMouseEnter = (row, col) => {
-    if (!this.state.mouseIsPressed) return;
-    const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
+    if (!mouseIsPressed) return;
+    const newGrid = getNewGridWithWallToggled(grid, row, col);
     // this.setState({grid: newGrid});
 
     setGrid(newGrid);
@@ -39,16 +39,6 @@ const Board = () => {
       ...node,
       isWall: !node.isWall,
     };
-
-    if (node.isStart || node.isFinish) {
-      //create component warning, update the props
-      console.log(
-        "Warning! This is the ",
-        node.isStart ? "Start Node" : "End Node"
-      );
-    } else {
-      newNode = { ...node, isWall: !node.isWall };
-    }
 
     newGrid[row][col] = newNode;
     return newGrid;
@@ -102,9 +92,9 @@ const Board = () => {
                   isStart={isStart}
                   isWall={isWall}
                   mouseIsPressed={mouseIsPressed}
-                  onMouseDown={(row, col) => this.handleMouseDown(row, col)}
-                  onMouseEnter={(row, col) => this.handleMouseEnter(row, col)}
-                  onMouseUp={() => this.handleMouseUp()}
+                  onMouseDown={(row, col) => handleMouseDown(row, col)}
+                  onMouseEnter={(row, col) => handleMouseEnter(row, col)}
+                  onMouseUp={() => handleMouseUp()}
                   row={row}
                 />
               );
