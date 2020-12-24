@@ -1,56 +1,41 @@
+// This file contains the board and the nodes rendering.
+
 import React, { useState, useEffect } from "react";
 import "../styles/Board.css";
 import Node from "./Node";
+import { useSelector, useDispatch } from "react-redux";
+import { updateGrid } from "../store/Node";
 
 const Board = () => {
-  const [grid, setGrid] = useState([]);
-  const [mouseIsPressed, setMouseIsPressed] = useState(false);
+  // const [grid, setGrid] = useState([]);
+  // const [mouseIsPressed, setMouseIsPressed] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const { grid } = useSelector((state) => state);
+
   const START_NODE_ROW = 10;
   const START_NODE_COL = 15;
   const FINISH_NODE_ROW = 10;
   const FINISH_NODE_COL = 35;
 
-  const handleMouseDown = (row, col) => {
-    const newGrid = getNewGridWithWallToggled(grid, row, col);
-    // this.setState({ grid: newGrid, mouseIsPressed: true });
-
-    setGrid(newGrid);
-    setMouseIsPressed(true);
-  };
-
   const handleMouseEnter = (row, col) => {
     if (!mouseIsPressed) return;
     const newGrid = getNewGridWithWallToggled(grid, row, col);
-    // this.setState({grid: newGrid});
 
-    setGrid(newGrid);
+    dispatch(updateGrid(newGrid));
   };
 
   const handleMouseUp = () => {
-    // this.setState({mouseIsPressed: false});
-
     setMouseIsPressed(false);
-  };
-
-  const getNewGridWithWallToggled = (grid, row, col) => {
-    const newGrid = grid.slice();
-    const node = newGrid[row][col];
-    const newNode = {
-      ...node,
-      isWall: !node.isWall,
-    };
-
-    newGrid[row][col] = newNode;
-    return newGrid;
   };
 
   useEffect(() => {
     const grid = getInitialGrid();
-    // this.setState({grid});
-    setGrid(grid);
+
+    dispatch(updateGrid(grid));
   }, []);
 
-  // console.log(grid);
   const getInitialGrid = () => {
     const grid = [];
     for (let row = 0; row < 20; row++) {
@@ -76,7 +61,6 @@ const Board = () => {
     };
   };
 
-  console.log(grid);
   return (
     <div className="grid">
       {grid.map((row, rowIdx) => {
