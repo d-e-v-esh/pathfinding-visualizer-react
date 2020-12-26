@@ -51,11 +51,7 @@ const nodesSlice = createSlice({
       state.isMousePressed = false;
     },
     makeWall: (state, { payload }) => {
-      // current.state.grid[payload].isWall = true;
-      console.log(payload);
-      // console.log(state.isMousePressed);
-      state.grid[0][0].isVisited = true;
-      // console.log(state.grid);
+      state.grid[payload.row][payload.col].isVisited = true;
     },
     breakWall: (state) => {
       state.grid = false;
