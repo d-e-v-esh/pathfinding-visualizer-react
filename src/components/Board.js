@@ -1,7 +1,7 @@
 // This file contains the board and the nodes rendering.
 
 import React, { useState, useEffect } from "react";
-import "../styles/Board.css";
+import "../styles/Board.scss";
 import Node from "./Node";
 import { useSelector, useDispatch } from "react-redux";
 import { updateGrid } from "../store/Node";
