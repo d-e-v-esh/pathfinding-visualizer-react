@@ -7,9 +7,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateGrid } from "../store/Node";
 
 const Board = () => {
-  // const [grid, setGrid] = useState([]);
-  // const [mouseIsPressed, setMouseIsPressed] = useState(false);
-
   const dispatch = useDispatch();
 
   const { grid } = useSelector((state) => state);

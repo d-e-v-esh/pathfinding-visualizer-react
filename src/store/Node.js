@@ -33,6 +33,7 @@ const createNode = (col, row) => {
 };
 
 const initialGrid = getInitialGrid();
+
 // console.log(initialGrid);
 
 const initialState = {
