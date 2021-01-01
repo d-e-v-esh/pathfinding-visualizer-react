@@ -24,7 +24,7 @@ const createNode = (col, row) => {
     col,
     row,
     isStart: row === START_NODE_ROW && col === START_NODE_COL,
-    isFinish: row === FINISH_NODE_ROW && col === FINISH_NODE_COL,
+    isEnd: row === FINISH_NODE_ROW && col === FINISH_NODE_COL,
     distance: Infinity,
     isVisited: false,
     isWall: false,
@@ -53,7 +53,6 @@ const nodesSlice = createSlice({
     },
     makeWall: (state, { payload }) => {
       const singleNode = state.grid[payload.row][payload.col];
-
       // Start and End nodes cannot be converted to walls
       if (!singleNode.isStart && !singleNode.isEnd) {
         singleNode.isWall = true;

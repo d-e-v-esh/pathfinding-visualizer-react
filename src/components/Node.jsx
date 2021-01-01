@@ -42,6 +42,8 @@ const Node = ({ col, row }) => {
     ? "node-wall"
     : singleNode.isStart
     ? "node-start"
+    : singleNode.isEnd
+    ? "node-end"
     : "";
   return (
     <div
