@@ -20,11 +20,17 @@ const Node = ({ col, row }) => {
 
   const handleMouseDown = (row, col) => {
     dispatch(mousePressed());
-    console.log(row, col);
+    // console.log(row, col);
+    dispatch(makeWall({ row, col }));
   };
 
   const handleMouseEnter = (row, col) => {
-    dispatch(makeWall({ row, col }));
+    if (isMousePressed) {
+      dispatch(makeWall({ row, col }));
+    }
+    if (!isMousePressed) {
+      dispatch(mouseNotPressed());
+    }
   };
 
   const handleMouseUp = () => {
