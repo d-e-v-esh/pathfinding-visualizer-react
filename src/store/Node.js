@@ -52,7 +52,12 @@ const nodesSlice = createSlice({
       state.isMousePressed = false;
     },
     makeWall: (state, { payload }) => {
-      state.grid[payload.row][payload.col].isVisited = true;
+      const singleNode = state.grid[payload.row][payload.col];
+
+      // Start and End nodes cannot be converted to walls
+      if (!singleNode.isStart && !singleNode.isEnd) {
+        singleNode.isWall = true;
+      }
     },
     breakWall: (state) => {
       state.grid = false;

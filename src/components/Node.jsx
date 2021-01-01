@@ -36,7 +36,13 @@ const Node = ({ col, row }) => {
   const handleMouseUp = () => {
     dispatch(mouseNotPressed());
   };
-  const extraClassName = grid[row][col].isVisited ? "node-wall" : "";
+
+  const singleNode = grid[row][col];
+  const extraClassName = singleNode.isWall
+    ? "node-wall"
+    : singleNode.isStart
+    ? "node-start"
+    : "";
   return (
     <div
       id={`node-${row}-${col}`}
