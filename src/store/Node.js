@@ -4,10 +4,22 @@
 
 import { createSlice } from "@reduxjs/toolkit";
 
-const START_NODE_ROW = 10;
-const START_NODE_COL = 15;
-const FINISH_NODE_ROW = 10;
-const FINISH_NODE_COL = 35;
+import { useSelector, useDispatch } from "react-redux";
+
+const createNode = (col, row) => {
+  return {
+    col,
+    row,
+    isStart:
+      // row === initialState.START_NODE_ROW &&
+      row === 10 && col === 15,
+    isEnd: row === 10 && col === 35,
+    distance: Infinity,
+    isVisited: false,
+    isWall: false,
+    previousNode: null,
+  };
+};
 
 const getInitialGrid = () => {
   const grid = [];
@@ -20,28 +32,24 @@ const getInitialGrid = () => {
   }
   return grid;
 };
-
-const createNode = (col, row) => {
-  return {
-    col,
-    row,
-    isStart: row === START_NODE_ROW && col === START_NODE_COL,
-    isEnd: row === FINISH_NODE_ROW && col === FINISH_NODE_COL,
-    distance: Infinity,
-    isVisited: false,
-    isWall: false,
-    previousNode: null,
-  };
-};
-
 const initialGrid = getInitialGrid();
 
-// console.log(initialGrid);
+const START_NODE_ROW = 10;
+const START_NODE_COL = 15;
+const FINISH_NODE_ROW = 10;
+const FINISH_NODE_COL = 35;
 
 const initialState = {
+  START_NODE_ROW: 10,
+  START_NODE_COL: 15,
+  FINISH_NODE_ROW: 10,
+  FINISH_NODE_COL: 35,
+
   grid: initialGrid,
   isMousePressed: false,
 };
+
+console.log(initialState.FINISH_NODE_COL);
 
 const nodesSlice = createSlice({
   name: "nodes",
