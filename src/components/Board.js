@@ -5,7 +5,10 @@ import "../styles/Board.scss";
 import Node from "./Node";
 import { useSelector, useDispatch } from "react-redux";
 import { updateGrid } from "../store/Node";
-import { Dijkstra, getNodesInShortestPathOrder } from "../algorithms/Dijkstras";
+import {
+  Dijkstra,
+  getNodesInShortestPathOrder,
+} from "../algorithms/Dijkstras(Basic)";
 
 const Board = () => {
   const dispatch = useDispatch();
@@ -46,16 +49,18 @@ const Board = () => {
   };
 
   const visualizeDijkstra = () => {
-    const { grid } = this.state;
     const startNode = grid[START_NODE_ROW][START_NODE_COL];
     const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
     const visitedNodesInOrder = Dijkstra(grid, startNode, finishNode);
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
-    this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+    animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
   };
 
   return (
     <div className="grid">
+      <button onClick={() => visualizeDijkstra()}>
+        Visualize Dijkstra's Algorithm
+      </button>
       {grid.map((row, rowIdx) => {
         return (
           <div key={rowIdx} className="grid-row">

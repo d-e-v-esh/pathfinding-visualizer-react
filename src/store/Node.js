@@ -47,12 +47,15 @@ const initialState = {
 
   grid: initialGrid,
   isMousePressed: false,
+  isShowingPath: false,
+  algorithmStatus: "STOPPED",
+  selectedAlgorithm: "dijkstra",
 };
 
 console.log(initialState.FINISH_NODE_COL);
 
 const nodesSlice = createSlice({
-  name: "nodes",
+  name: "Nodes",
   initialState,
   reducers: {
     mousePressed: (state) => {
@@ -74,12 +77,67 @@ const nodesSlice = createSlice({
   },
 });
 
+const algorithmStatusSlice = createSlice({
+  name: "AlgorithmStatus",
+
+  initialState,
+  reducers: {
+    runAlgorithm: (state) => {
+      state.algorithmStatus = "RUNNING";
+    },
+    stopAlgorithm: (state) => {
+      state.algorithmStatus = "STOPPED";
+    },
+    pauseAlgorithm: (state) => {
+      state.algorithmStatus = "PAUSED";
+    },
+    completeAlgorithm: (state) => {
+      state.algorithmStatus = "COMPLETE";
+    },
+  },
+});
+
+const isShowingPathSlice = createSlice({
+  name: "IsShowingPath",
+  initialState,
+  reducers: {
+    showPath: (state) => {
+      state.isShowingPath = true;
+    },
+    hidePath: (state) => {
+      state.isShowingPath = false;
+    },
+  },
+});
+
+const selectAlgorithmSlice = createSlice({
+  name: "SelectedAlgorithm",
+  initialState,
+  reducers: {
+    aStar: (state) => {
+      state.selectedAlgorithm = "dijkstra";
+    },
+    BFS: (state) => {
+      state.selectedAlgorithm = "BFS";
+    },
+    DFS: (state) => {
+      state.selectedAlgorithm = "BFS";
+    },
+  },
+});
+
 const { actions, reducer } = nodesSlice;
 export const {
+  // ----- nodesSlice
   updateGrid,
   mousePressed,
   mouseNotPressed,
   makeWall,
   breakWall,
+  //-------- algorithmStatusSlice
+  runAlgorithm,
+  stopAlgorithm,
+  pauseAlgorithm,
+  completeAlgorithm,
 } = actions;
 export default reducer;
