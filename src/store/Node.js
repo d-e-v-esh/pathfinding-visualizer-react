@@ -1,5 +1,7 @@
 // State management for the grid
 
+// TODO: Add right click functionality and then figure out dijkstra and implement by tomorrow.
+
 import { createSlice } from "@reduxjs/toolkit";
 
 const START_NODE_ROW = 10;
