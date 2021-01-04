@@ -52,20 +52,14 @@ const initialState = {
   selectedAlgorithm: "dijkstra",
 };
 
-console.log(initialState.FINISH_NODE_COL);
+// console.log(initialState.FINISH_NODE_COL);
 
 const nodesSlice = createSlice({
   name: "Nodes",
   initialState,
   reducers: {
-    mousePressed: (state) => {
-      state.isMousePressed = true;
-    },
-    mouseNotPressed: (state) => {
-      state.isMousePressed = false;
-    },
     makeWall: (state, { payload }) => {
-      const singleNode = state.grid[payload.row][payload.col];
+      var singleNode = state.grid[payload.row][payload.col];
       // Start and End nodes cannot be converted to walls
       if (!singleNode.isStart && !singleNode.isEnd) {
         singleNode.isWall = true;
@@ -74,59 +68,15 @@ const nodesSlice = createSlice({
     breakWall: (state) => {
       state.grid = false;
     },
-  },
-});
-
-const algorithmStatusSlice = createSlice({
-  name: "AlgorithmStatus",
-
-  initialState,
-  reducers: {
-    runAlgorithm: (state) => {
-      state.algorithmStatus = "RUNNING";
-    },
-    stopAlgorithm: (state) => {
-      state.algorithmStatus = "STOPPED";
-    },
-    pauseAlgorithm: (state) => {
-      state.algorithmStatus = "PAUSED";
-    },
-    completeAlgorithm: (state) => {
-      state.algorithmStatus = "COMPLETE";
+    visitNode: (state, { payload }) => {
+      // const singleNode = state.grid[payload.row][payload.col];
+      // console.log(singleNode);
     },
   },
 });
 
-const isShowingPathSlice = createSlice({
-  name: "IsShowingPath",
-  initialState,
-  reducers: {
-    showPath: (state) => {
-      state.isShowingPath = true;
-    },
-    hidePath: (state) => {
-      state.isShowingPath = false;
-    },
-  },
-});
-
-const selectAlgorithmSlice = createSlice({
-  name: "SelectedAlgorithm",
-  initialState,
-  reducers: {
-    aStar: (state) => {
-      state.selectedAlgorithm = "dijkstra";
-    },
-    BFS: (state) => {
-      state.selectedAlgorithm = "BFS";
-    },
-    DFS: (state) => {
-      state.selectedAlgorithm = "BFS";
-    },
-  },
-});
-
-const { actions, reducer } = nodesSlice;
+// const { actions, reducer } = nodesSlice;
+// const { actions, reducer } = mouseEventSlice;
 export const {
   // ----- nodesSlice
   updateGrid,
