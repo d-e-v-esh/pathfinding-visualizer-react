@@ -1,3 +1,13 @@
+// TODO after implementing the algorithms: Make a local state here with useState and store all the changes to the grid in that local state. We will only dispatch once when user clicks to run the algorithm. We will dispatch the local grid state and push it to the global state then perform the algorithm.
+
+// Not sure if this will improve performance but we need to see.
+
+// We shouldn't be able to change the global grid state from the screen.
+
+// We won't pull anything directly from the global state
+
+// If it lags even a little bit then we can put a small loading gif till the algorithm starts.
+
 import React from "react";
 
 import "../styles/Node.scss";
@@ -12,7 +22,8 @@ import { mousePressed, mouseNotPressed } from "../store/Controls";
 const Node = ({ col, row }) => {
   const dispatch = useDispatch();
 
-  const { grid, isMousePressed } = useSelector((state) => state.nodes);
+  const { grid } = useSelector((state) => state.nodes);
+  const { isMousePressed } = useSelector((state) => state.controls);
 
   // Mouse Handling Events
 
@@ -27,7 +38,7 @@ const Node = ({ col, row }) => {
       dispatch(makeWall({ row, col }));
     }
     if (!isMousePressed) {
-      dispatch(mouseNotPressed());
+      // dispatch(mouseNotPressed());
     }
   };
 
