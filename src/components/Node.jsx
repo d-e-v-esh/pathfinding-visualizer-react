@@ -35,7 +35,7 @@ const Node = ({ col, row }) => {
     dispatch(mouseNotPressed());
   };
 
-  console.log(grid);
+  // console.log(grid);
   const singleNode = grid[row][col];
 
   const extraClassName = singleNode.isWall

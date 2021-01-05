@@ -9,10 +9,10 @@ const Board = () => {
   const dispatch = useDispatch();
 
   const { grid } = useSelector((state) => state.nodes);
-  // const { isMousePressed } = useSelector((state) => state.controls);
+  const { isMousePressed } = useSelector((state) => state.controls);
 
   // useEffect(() => {}, []);
-  console.log(grid);
+  // console.log(grid);
   // console.log(isMousePressed);
   return (
     <div className="grid">

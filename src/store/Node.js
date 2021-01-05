@@ -24,9 +24,9 @@ const createNode = (col, row) => {
 
 const getInitialGrid = () => {
   const grid = [];
-  for (let row = 0; row < 10; row++) {
+  for (let row = 0; row < 20; row++) {
     const currentRow = [];
-    for (let col = 0; col < 5; col++) {
+    for (let col = 0; col < 50; col++) {
       currentRow.push(createNode(col, row));
     }
     grid.push(currentRow);
@@ -41,10 +41,6 @@ const initialState = {
   START_NODE_COL: 15,
   FINISH_NODE_ROW: 10,
   FINISH_NODE_COL: 35,
-  isMousePressed: false,
-  // isShowingPath: false,
-  // algorithmStatus: "STOPPED",
-  // selectedAlgorithm: "dijkstra",
 };
 
 // console.log(initialState.FINISH_NODE_COL);
@@ -60,6 +56,13 @@ const nodesSlice = createSlice({
         singleNode.isWall = true;
       }
     },
+    breakWall: (state, { payload }) => {
+      const singleNode = state.grid[payload.row][payload.col];
+      // Start and End nodes cannot be converted to walls
+      if (!singleNode.isStart && !singleNode.isEnd) {
+        singleNode.isWall = false;
+      }
+    },
     // breakWall: (state) => {
     //   state.grid = false;
     // },
@@ -70,25 +73,6 @@ const nodesSlice = createSlice({
   },
 });
 
-const mouseEventSlice = createSlice({
-  name: "MouseEvent",
-  initialState,
-  reducers: {
-    mousePressed: (state) => {
-      state.isMousePressed = true;
-    },
-    mouseNotPressed: (state) => {
-      state.isMousePressed = false;
-    },
-  },
-});
-
-// const { actions, reducer } = nodesSlice;
 export const { makeWall, breakWall } = nodesSlice.actions;
-export const { mousePressed, mouseNotPressed } = mouseEventSlice.actions;
 
-const rootReducer = combineReducers({
-  nodes: nodesSlice.reducer,
-});
-
-export default rootReducer;
+export default nodesSlice.reducer;

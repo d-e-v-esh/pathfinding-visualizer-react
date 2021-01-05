@@ -7,11 +7,12 @@ import controlsReducer from "./Controls";
 
 const rootReducer = combineReducers({
   nodes: nodesReducer,
+  controls: controlsReducer,
 });
 
 const store = configureStore({
-  reducer: nodesReducer,
-  // middleware: [],
+  reducer: rootReducer,
+  middleware: [],
 });
 
 export default store;
