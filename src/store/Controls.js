@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const initialState = {
+  isMousePressed: false,
+};
+
 const mouseEventSlice = createSlice({
   name: "MouseEvent",
   initialState,
@@ -12,3 +16,9 @@ const mouseEventSlice = createSlice({
     },
   },
 });
+
+const { actions, reducer } = mouseEventSlice;
+
+export const { mousePressed, mouseNotPressed } = actions;
+
+export default reducer;

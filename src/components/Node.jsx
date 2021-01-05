@@ -2,19 +2,17 @@ import React from "react";
 
 import "../styles/Node.scss";
 
+// Redux
 import { useSelector, useDispatch } from "react-redux";
-import {
-  mousePressed,
-  mouseNotPressed,
-  updateGrid,
-  makeWall,
-  breakWall,
-} from "../store/Node";
+
+// Importing Actions
+import { updateGrid, makeWall, breakWall } from "../store/Node";
+import { mousePressed, mouseNotPressed } from "../store/Controls";
 
 const Node = ({ col, row }) => {
   const dispatch = useDispatch();
 
-  const { grid, isMousePressed } = useSelector((state) => state);
+  const { grid, isMousePressed } = useSelector((state) => state.nodes);
 
   // Mouse Handling Events
 
@@ -37,7 +35,9 @@ const Node = ({ col, row }) => {
     dispatch(mouseNotPressed());
   };
 
+  console.log(grid);
   const singleNode = grid[row][col];
+
   const extraClassName = singleNode.isWall
     ? "node-wall"
     : singleNode.isStart

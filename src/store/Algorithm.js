@@ -1,5 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const initialState = {
+  START_NODE_ROW: 10,
+  START_NODE_COL: 15,
+  FINISH_NODE_ROW: 10,
+  FINISH_NODE_COL: 35,
+
+  grid: initialGrid,
+  isShowingPath: false,
+  algorithmStatus: "STOPPED",
+  selectedAlgorithm: "dijkstra",
+};
+
 const algorithmStatusSlice = createSlice({
   name: "AlgorithmStatus",
 

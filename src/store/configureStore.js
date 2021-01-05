@@ -1,9 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
-import Node from "./Node";
+import { combineReducers } from "redux";
+// import rootReducer from "./rootReducer";
+
+import nodesReducer from "./Node";
+import controlsReducer from "./Controls";
+
+const rootReducer = combineReducers({
+  nodes: nodesReducer,
+});
 
 const store = configureStore({
-  reducer: Node,
-  middleware: [],
+  reducer: nodesReducer,
+  // middleware: [],
 });
 
 export default store;
