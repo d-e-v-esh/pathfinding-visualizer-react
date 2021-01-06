@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import "../styles/Board.scss";
 import Node from "./Node";
 import { useSelector, useDispatch } from "react-redux";
-import { Dijkstra, getNodesInShortestPathOrder } from "../algorithms/Dijkstra";
+import { Dijkstra } from "../algorithms/Dijkstra";
 
 const Board = () => {
   const dispatch = useDispatch();
@@ -18,39 +18,18 @@ const Board = () => {
   } = useSelector((state) => state.nodes);
   const { isMousePressed } = useSelector((state) => state.controls);
 
-  const animateDijkstra = (visitedNodesInOrder, nodesInShortestPathOrder) => {
-    for (let i = 0; i <= visitedNodesInOrder.length; i++) {
-      if (i === visitedNodesInOrder.length) {
-        setTimeout(() => {
-          this.animateShortestPath(nodesInShortestPathOrder);
-        }, 10 * i);
-        return;
-      }
-      setTimeout(() => {
-        const node = visitedNodesInOrder[i];
-        document.getElementById(`node-${node.row}-${node.col}`).className =
-          "node node-visited";
-      }, 10 * i);
-    }
-  };
-
-  const visualizeDijkstra = () => {
-    const startNode = grid[START_NODE_ROW][START_NODE_COL];
-    const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
-    const visitedNodesInOrder = Dijkstra(
-      grid,
-      START_NODE_ROW,
-      START_NODE_COL,
-      FINISH_NODE_ROW,
-      FINISH_NODE_COL
-    );
-    const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
-    animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
-  };
-
   return (
     <div className="grid">
-      <button onClick={() => visualizeDijkstra()}>
+      <button
+        onClick={() =>
+          Dijkstra(
+            grid,
+            START_NODE_ROW,
+            START_NODE_COL,
+            FINISH_NODE_ROW,
+            FINISH_NODE_COL
+          )
+        }>
         Visualize Dijkstra's Algorithm
       </button>
       {grid.map((row, rowIdx) => {
