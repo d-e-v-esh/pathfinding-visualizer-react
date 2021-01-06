@@ -80,7 +80,7 @@ export const Dijkstra = (
     }
 
     const result = [];
-    console.log(result);
+
     const endNodeData = visited.find((n) => n.isEnd);
     for (
       let i = 0, node = endNodeData.previousNode;
@@ -92,12 +92,14 @@ export const Dijkstra = (
       }
       result.push({ ...node, visitedIndex: i });
     }
-    console.log(visited);
+    // console.log(visited);
+
+    // TODO: Result is still an empty array (check the for loop) but visited is working
+    // console.log(result);
+
     //
     return { visited, result };
   };
-
-  // console.log(neighbors());
 
   // Main Return Statement
   return basicAStar(grid, startNode, endNode, dijkstraHeuristic);

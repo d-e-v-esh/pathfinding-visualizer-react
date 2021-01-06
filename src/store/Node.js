@@ -63,16 +63,23 @@ const nodesSlice = createSlice({
         singleNode.isWall = false;
       }
     },
-    // breakWall: (state) => {
-    //   state.grid = false;
-    // },
-    // visitNode: (state, { payload }) => {
-    //   // const singleNode = state.grid[payload.row][payload.col];
-    //   // console.log(singleNode);
-    // },
+
+    visitNode: (state, { payload }) => {
+      // const singleNode = state.grid[payload.row][payload.col];
+      // if (!singleNode.isStart && !singleNode.isEnd) {
+      //   singleNode.isVisited = true;
+      // }
+
+      for (let i = 1; i < payload.length; i++) {
+        // console.log(payload[i]);
+        state.grid[payload[i].row][payload[i].col].isVisited = true;
+      }
+
+      // TODO: Every node that we push from there, we want them to become visited here
+    },
   },
 });
 
-export const { makeWall, breakWall } = nodesSlice.actions;
+export const { makeWall, breakWall, visitNode } = nodesSlice.actions;
 
 export default nodesSlice.reducer;

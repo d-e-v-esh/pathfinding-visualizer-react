@@ -16,7 +16,7 @@ import "../styles/Node.scss";
 import { useSelector, useDispatch } from "react-redux";
 
 // Importing Actions
-import { updateGrid, makeWall, breakWall } from "../store/Node";
+import { makeWall, breakWall } from "../store/Node";
 import { mousePressed, mouseNotPressed } from "../store/Controls";
 
 const Node = ({ col, row }) => {

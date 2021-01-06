@@ -5,6 +5,7 @@ import "../styles/Board.scss";
 import Node from "./Node";
 import { useSelector, useDispatch } from "react-redux";
 import { Dijkstra } from "../algorithms/Dijkstra";
+import { visitNode } from "../store/Node";
 
 const Board = () => {
   const dispatch = useDispatch();
@@ -18,18 +19,22 @@ const Board = () => {
   } = useSelector((state) => state.nodes);
   const { isMousePressed } = useSelector((state) => state.controls);
 
+  const dijkstraHandler = () => {
+    const { visited } = Dijkstra(
+      grid,
+      START_NODE_ROW,
+      START_NODE_COL,
+      FINISH_NODE_ROW,
+      FINISH_NODE_COL
+    );
+
+    // console.log(visited);
+    dispatch(visitNode(visited));
+  };
+
   return (
     <div className="grid">
-      <button
-        onClick={() =>
-          Dijkstra(
-            grid,
-            START_NODE_ROW,
-            START_NODE_COL,
-            FINISH_NODE_ROW,
-            FINISH_NODE_COL
-          )
-        }>
+      <button onClick={() => dijkstraHandler()}>
         Visualize Dijkstra's Algorithm
       </button>
       {grid.map((row, rowIdx) => {
