@@ -49,12 +49,16 @@ const Node = ({ col, row }) => {
   // console.log(grid);
   const singleNode = grid[row][col];
 
+  // TODO: Refactor this part to rely on the state directly
+
   const extraClassName = singleNode.isWall
     ? "node-wall"
     : singleNode.isStart
     ? "node-start"
     : singleNode.isEnd
     ? "node-end"
+    : singleNode.isVisited
+    ? "node-visited"
     : "";
   return (
     <div
