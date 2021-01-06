@@ -11,26 +11,31 @@ export const Dijkstra = (
   FINISH_NODE_ROW,
   FINISH_NODE_COL
 ) => {
-  console.log(grid);
+  // console.log(grid);
   const startNode = grid[START_NODE_ROW][START_NODE_COL];
   const endNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
 
-  function neighbors(node1, node2) {
-    const xDistance = Math.abs(node1.x - node2.x);
-    const yDistance = Math.abs(node1.y - node2.y);
+  console.log(startNode, endNode);
+
+  const neighbors = (node1, node2) => {
+    const xDistance = Math.abs(node1.row - node2.row);
+    const yDistance = Math.abs(node1.col - node2.col);
     return xDistance + yDistance === 1;
-  }
+  };
 
   const dijkstraHeuristic = {
     comparer: (a, b) => a.distanceFromStart - b.distanceFromStart,
     addHeuristics: (grid, startNode, endNode) =>
       grid.map((girdNode) => ({
         ...girdNode,
-        distanceFromStart: girdNode.isStart ? 0 : Infinity,
+        distanceFromStart: girdNode.isStart ? 0 : Infinity, // either 0 or infinity
         previousNode: null,
+        // console.log()
       })),
     map: (currentNode, testedNode) => {
       const calculatedDistance = currentNode.distanceFromStart + 1;
+
+      // console.log(currentNode);
       return neighbors(currentNode, testedNode)
         ? {
             ...testedNode,
@@ -50,8 +55,9 @@ export const Dijkstra = (
 
   const basicAStar = (grid, startNode, endNode, heuristic) => {
     const visited = [];
-    const flatNodes = grid.flat().filter((gridNode) => !gridNode.isWall);
 
+    const flatNodes = grid.flat().filter((gridNode) => !gridNode.isWall);
+    // console.log(flatNodes);
     let unvisited = heuristic.addHeuristics(flatNodes, startNode, endNode);
 
     for (let i = 0; unvisited.length !== 0; i++) {
@@ -86,9 +92,12 @@ export const Dijkstra = (
       }
       result.push({ ...node, visitedIndex: i });
     }
-
+    console.log(visited);
+    //
     return { visited, result };
   };
+
+  // console.log(neighbors());
 
   // Main Return Statement
   return basicAStar(grid, startNode, endNode, dijkstraHeuristic);
