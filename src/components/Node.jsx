@@ -8,11 +8,12 @@
 
 // If it lags even a little bit then we can put a small loading gif till the algorithm starts.
 
-import React from "react";
+import React, { useState } from "react";
 
 import "../styles/Node.scss";
 
 // Redux
+
 import { useSelector, useDispatch } from "react-redux";
 
 // Importing Actions
