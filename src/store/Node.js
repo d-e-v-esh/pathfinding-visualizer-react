@@ -7,17 +7,21 @@ import { combineReducers } from "redux";
 
 // import { useSelector, useDispatch } from "react-redux";
 
+const startNodeRow = 10;
+const startNodeCol = 15;
+const endNodeRow = 10;
+const endNodeCol = 40;
+
 const createNode = (col, row) => {
   return {
     col,
     row,
-    isStart:
-      // row === initialState.START_NODE_ROW &&
-      row === 10 && col === 15,
-    isEnd: row === 10 && col === 35,
+    isStart: row === startNodeRow && col === startNodeCol,
+    isEnd: row === endNodeRow && col === endNodeCol,
     distance: Infinity,
     isVisited: false,
     isWall: false,
+    isPath: false,
     previousNode: null,
   };
 };
@@ -37,10 +41,10 @@ const initialGrid = getInitialGrid();
 
 const initialState = {
   grid: initialGrid,
-  START_NODE_ROW: 10,
-  START_NODE_COL: 15,
-  FINISH_NODE_ROW: 10,
-  FINISH_NODE_COL: 35,
+  START_NODE_ROW: startNodeRow,
+  START_NODE_COL: startNodeCol,
+  FINISH_NODE_ROW: endNodeRow,
+  FINISH_NODE_COL: endNodeCol,
 };
 
 // console.log(initialState.FINISH_NODE_COL);
@@ -65,21 +69,21 @@ const nodesSlice = createSlice({
     },
 
     visitNode: (state, { payload }) => {
-      // const singleNode = state.grid[payload.row][payload.col];
-      // if (!singleNode.isStart && !singleNode.isEnd) {
-      //   singleNode.isVisited = true;
-      // }
-
-      for (let i = 1; i < payload.length; i++) {
-        // console.log(payload[i]);
+      // console.log(payload[i]); => This returns all the visited nodes in one array
+      for (let i = 0; i < payload.length; i++) {
         state.grid[payload[i].row][payload[i].col].isVisited = true;
       }
+    },
 
-      // TODO: Every node that we push from there, we want them to become visited here
+    makePath: (state, { payload }) => {
+      // console.log(payload[i]); => This returns all the visited nodes in one array
+      for (let i = 0; i < payload.length; i++) {
+        state.grid[payload[i].row][payload[i].col].isPath = true;
+      }
     },
   },
 });
 
-export const { makeWall, breakWall, visitNode } = nodesSlice.actions;
+export const { makeWall, breakWall, visitNode, makePath } = nodesSlice.actions;
 
 export default nodesSlice.reducer;

@@ -5,7 +5,7 @@ import "../styles/Board.scss";
 import Node from "./Node";
 import { useSelector, useDispatch } from "react-redux";
 import { Dijkstra } from "../algorithms/Dijkstra";
-import { visitNode } from "../store/Node";
+import { visitNode, makePath } from "../store/Node";
 
 const Board = () => {
   const dispatch = useDispatch();
@@ -20,7 +20,7 @@ const Board = () => {
   const { isMousePressed } = useSelector((state) => state.controls);
 
   const dijkstraHandler = () => {
-    const { visited } = Dijkstra(
+    const { visited, result } = Dijkstra(
       grid,
       START_NODE_ROW,
       START_NODE_COL,
@@ -28,8 +28,8 @@ const Board = () => {
       FINISH_NODE_COL
     );
 
-    // console.log(visited);
-    dispatch(visitNode(visited));
+    dispatch(makePath(result));
+    // dispatch(visitNode(visited));
   };
 
   return (

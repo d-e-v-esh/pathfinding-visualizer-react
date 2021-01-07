@@ -15,7 +15,7 @@ export const Dijkstra = (
   const startNode = grid[START_NODE_ROW][START_NODE_COL];
   const endNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
 
-  console.log(startNode, endNode);
+  // console.log(startNode, endNode);
 
   const neighbors = (node1, node2) => {
     const xDistance = Math.abs(node1.row - node2.row);
@@ -80,22 +80,26 @@ export const Dijkstra = (
     }
 
     const result = [];
-
     const endNodeData = visited.find((n) => n.isEnd);
+    console.log(endNodeData);
+    // endNodeData contains an object that contains it's previous node. That previous node contains it's previous node and soo on until it gets to the startNode
+
     for (
-      let i = 0, node = endNodeData.previousNode;
-      node?.isStart;
+      let node = endNodeData.previousNode, i = 0;
+      node.isStart !== true; // we will continue the loop until there is a node.isStart that is true
       node = node.previousNode, i++
     ) {
+      // If there no more nodes left then return visited and result otherwise keep pushing the nodes in the result array
+      //--------------------------------------
+
+      result.push({ ...node, visitedIndex: i });
+      // console.log(result);
       if (!node) {
         return { visited, result };
       }
-      result.push({ ...node, visitedIndex: i });
     }
-    // console.log(visited);
 
-    // TODO: Result is still an empty array (check the for loop) but visited is working
-    // console.log(result);
+    console.log(result);
 
     //
     return { visited, result };

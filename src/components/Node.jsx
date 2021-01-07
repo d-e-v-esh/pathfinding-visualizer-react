@@ -59,6 +59,8 @@ const Node = ({ col, row }) => {
     ? "node-end"
     : singleNode.isVisited
     ? "node-visited"
+    : singleNode.isPath
+    ? "node-shortest-path"
     : "";
   return (
     <div
