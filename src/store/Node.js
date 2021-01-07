@@ -7,21 +7,12 @@ import { combineReducers } from "redux";
 
 // import { useSelector, useDispatch } from "react-redux";
 
+// This file contains the global state of our nodes
+
 const startNodeRow = 10;
 const startNodeCol = 15;
 const endNodeRow = 10;
 const endNodeCol = 40;
-
-const asdljkfsakfjdhasdfhaksjfhaksfj = 45465465;
-const dfgsd = 45;
-const sfdgasfda = 4521;
-const asdljkfsakfjdhasdfgfhaksjfhaksfj = 45615651;
-const asdljkfsakfjdhasddsfgsdfhaksjfhaksfj = 456516;
-const asdljkfsakfjdhasdfhakadfashgsfsjfhaksfj = 45651;
-const asdljkfsakfjdhasdfhadfsgadfgsdghfaksjfhaksfj = 65145;
-const asdljkfsakfjdhasdfhakagfafghsghsjfhaksfj = 45651;
-const asdljkfsakfjdhasdfafgadfgshhaksjfhaksfj = 45651;
-const asdljkfsakfjdhasdfhhsfghjsfghaksjfhaksfj = 456;
 
 const createNode = (col, row) => {
   return {

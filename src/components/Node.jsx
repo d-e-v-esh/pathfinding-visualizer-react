@@ -20,6 +20,44 @@ import { useSelector, useDispatch } from "react-redux";
 import { makeWall, breakWall } from "../store/Node";
 import { mousePressed, mouseNotPressed } from "../store/Controls";
 
+// Setting up Local Grid
+
+const startNodeRow = 10;
+const startNodeCol = 15;
+const endNodeRow = 10;
+const endNodeCol = 40;
+
+const createNode = (col, row) => {
+  return {
+    col,
+    row,
+    isStart: row === startNodeRow && col === startNodeCol,
+    isEnd: row === endNodeRow && col === endNodeCol,
+    distance: Infinity,
+    isVisited: false,
+    isWall: false,
+    isPath: false,
+    previousNode: null,
+  };
+};
+
+const getInitialGrid = () => {
+  const grid = [];
+  for (let row = 0; row < 20; row++) {
+    const currentRow = [];
+    for (let col = 0; col < 50; col++) {
+      currentRow.push(createNode(col, row));
+    }
+    grid.push(currentRow);
+  }
+  return grid;
+};
+const initialLocalGrid = getInitialGrid();
+
+const [grid, setGrid] = useState({
+  newGird: initialLocalGrid,
+});
+
 const Node = ({ col, row }) => {
   const dispatch = useDispatch();
 
