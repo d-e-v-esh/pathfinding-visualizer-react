@@ -1,6 +1,6 @@
 // This file contains the board and the nodes rendering.
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/Board.scss";
 import Node from "./Node";
 import { useSelector, useDispatch } from "react-redux";
@@ -17,11 +17,16 @@ const Board = () => {
     FINISH_NODE_ROW,
     FINISH_NODE_COL,
   } = useSelector((state) => state.nodes);
+
+  const newGrid = grid.slice();
+  const [localGrid, setLocalGrid] = useState(newGrid);
+  // console.log(localGrid);
+
   const { isMousePressed } = useSelector((state) => state.controls);
 
   const dijkstraHandler = () => {
     const { visited, result } = Dijkstra(
-      grid,
+      localGrid, // => global to local
       START_NODE_ROW,
       START_NODE_COL,
       FINISH_NODE_ROW,
@@ -37,16 +42,19 @@ const Board = () => {
       <button onClick={() => dijkstraHandler()}>
         Visualize Dijkstra's Algorithm
       </button>
-      {grid.map((row, rowIdx) => {
+      {localGrid.map((row, rowIdx) => {
+        // => global to local
         return (
           <div key={rowIdx} className="grid-row">
             {row.map((node, nodeIdx) => {
-              const { row, col, isFinish, isStart, isWall } = node;
+              const { row, col } = node;
               return (
                 <Node
                   key={nodeIdx}
                   row={row}
                   col={col}
+                  localGrid={localGrid}
+                  setLocalGrid={setLocalGrid}
                   // isFinish={isFinish}
                   // isStart={isStart}
                   // isWall={isWall}

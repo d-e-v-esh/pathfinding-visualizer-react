@@ -22,59 +22,27 @@ import { mousePressed, mouseNotPressed } from "../store/Controls";
 
 // Setting up Local Grid
 
-const startNodeRow = 10;
-const startNodeCol = 15;
-const endNodeRow = 10;
-const endNodeCol = 40;
+const Node = ({ col, row, localGrid, setLocalGrid }) => {
+  const [localNode, setLocalNode] = useState(localGrid[row][col].isWall);
+  // const { grid } = useSelector((state) => state.nodes);
 
-const createNode = (col, row) => {
-  return {
-    col,
-    row,
-    isStart: row === startNodeRow && col === startNodeCol,
-    isEnd: row === endNodeRow && col === endNodeCol,
-    distance: Infinity,
-    isVisited: false,
-    isWall: false,
-    isPath: false,
-    previousNode: null,
-  };
-};
-
-const getInitialGrid = () => {
-  const grid = [];
-  for (let row = 0; row < 20; row++) {
-    const currentRow = [];
-    for (let col = 0; col < 50; col++) {
-      currentRow.push(createNode(col, row));
-    }
-    grid.push(currentRow);
-  }
-  return grid;
-};
-const initialLocalGrid = getInitialGrid();
-
-const [grid, setGrid] = useState({
-  newGird: initialLocalGrid,
-});
-
-const Node = ({ col, row }) => {
   const dispatch = useDispatch();
 
-  const { grid } = useSelector((state) => state.nodes);
   const { isMousePressed } = useSelector((state) => state.controls);
 
   // Mouse Handling Events
 
   const handleMouseDown = (row, col) => {
-    dispatch(mousePressed());
-    // console.log(row, col);
-    dispatch(makeWall({ row, col }));
+    // dispatch(mousePressed());
+    // dispatch(makeWall({ row, col }));
+    // setLocalGrid(() => getNewGridWithWallToggled(localGrid, row, col));
+    setLocalNode(() => (localGrid[row][col].isWall = true));
+    console.log(localGrid[row][col]);
   };
 
   const handleMouseEnter = (row, col) => {
     if (isMousePressed) {
-      dispatch(makeWall({ row, col }));
+      // dispatch(makeWall({ row, col }));
     }
     if (!isMousePressed) {
       // dispatch(mouseNotPressed());
@@ -82,11 +50,11 @@ const Node = ({ col, row }) => {
   };
 
   const handleMouseUp = () => {
-    dispatch(mouseNotPressed());
+    // dispatch(mouseNotPressed());
   };
 
   // console.log(grid);
-  const singleNode = grid[row][col];
+  const singleNode = localGrid[row][col];
 
   // TODO: Refactor this part to rely on the state directly
 
