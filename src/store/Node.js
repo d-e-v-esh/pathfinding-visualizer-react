@@ -55,11 +55,23 @@ const nodesSlice = createSlice({
   name: "Nodes",
   initialState,
   reducers: {
+    updateGrid: (state, { payload }) => {
+      state.grid = payload;
+    },
     makeWall: (state, { payload }) => {
       const singleNode = state.grid[payload.row][payload.col];
       // Start and End nodes cannot be converted to walls
       if (!singleNode.isStart && !singleNode.isEnd) {
         singleNode.isWall = true;
+      }
+    },
+    makeMultipleWalls: (state, { payload }) => {
+      // const singleNode = state.grid[payload.row][payload.col];
+
+      for (let i = 0; i < payload.length; i++) {
+        const turnToWallRow = payload[i][0];
+        const turnToWallCol = payload[i][1];
+        state.grid[turnToWallRow][turnToWallCol].isWall = true;
       }
     },
     breakWall: (state, { payload }) => {
@@ -86,6 +98,13 @@ const nodesSlice = createSlice({
   },
 });
 
-export const { makeWall, breakWall, visitNode, makePath } = nodesSlice.actions;
+export const {
+  makeWall,
+  breakWall,
+  visitNode,
+  makePath,
+  updateGrid,
+  makeMultipleWalls,
+} = nodesSlice.actions;
 
 export default nodesSlice.reducer;

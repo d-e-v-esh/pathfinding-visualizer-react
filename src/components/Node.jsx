@@ -8,7 +8,7 @@
 
 // If it lags even a little bit then we can put a small loading gif till the algorithm starts.
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import "../styles/Node.scss";
 
@@ -17,56 +17,58 @@ import "../styles/Node.scss";
 import { useSelector, useDispatch } from "react-redux";
 
 // Importing Actions
-import { makeWall, breakWall } from "../store/Node";
+import {
+  makeWall,
+  breakWall,
+  updateGrid,
+  makeMultipleWalls,
+} from "../store/Node";
 import { mousePressed, mouseNotPressed } from "../store/Controls";
 
 // Setting up Local Grid
+const draggedWalls = [];
 
-const Node = ({ col, row, localGrid, setLocalGrid }) => {
-  const [localNode, setLocalNode] = useState(localGrid[row][col].isWall);
-  // const { grid } = useSelector((state) => state.nodes);
+const nodeWallClassChange = false;
 
+const Node = ({ col, row, coordinate }) => {
   const dispatch = useDispatch();
+
+  const { grid } = useSelector((state) => state.nodes);
 
   const { isMousePressed } = useSelector((state) => state.controls);
 
-  // Mouse Handling Events
-
   const handleMouseDown = (row, col) => {
-    // dispatch(mousePressed());
+    dispatch(mousePressed());
+    draggedWalls.push([row, col]);
     // dispatch(makeWall({ row, col }));
-    // setLocalGrid(() => getNewGridWithWallToggled(localGrid, row, col));
-    setLocalNode(() => (localGrid[row][col].isWall = true));
-    console.log(localGrid[row][col]);
   };
 
   const handleMouseEnter = (row, col) => {
+    console.log(coordinate);
     if (isMousePressed) {
-      // dispatch(makeWall({ row, col }));
-    }
-    if (!isMousePressed) {
-      // dispatch(mouseNotPressed());
+      draggedWalls.push([row, col]);
     }
   };
 
   const handleMouseUp = () => {
-    // dispatch(mouseNotPressed());
+    dispatch(mouseNotPressed());
+
+    dispatch(makeMultipleWalls(draggedWalls));
   };
 
-  // console.log(grid);
-  const singleNode = localGrid[row][col];
-
+  const globalNode = grid[row][col];
+  // const singleNode = localGrid[row][col];
   // TODO: Refactor this part to rely on the state directly
 
-  const extraClassName = singleNode.isWall
+  const extraClassName = globalNode.isWall
     ? "node-wall"
-    : singleNode.isStart
+    : globalNode.isStart
     ? "node-start"
-    : singleNode.isEnd
+    : globalNode.isEnd
     ? "node-end"
-    : singleNode.isVisited
+    : globalNode.isVisited
     ? "node-visited"
-    : singleNode.isPath
+    : globalNode.isPath
     ? "node-shortest-path"
     : "";
   return (

@@ -5,7 +5,7 @@ import "../styles/Board.scss";
 import Node from "./Node";
 import { useSelector, useDispatch } from "react-redux";
 import { Dijkstra } from "../algorithms/Dijkstra";
-import { visitNode, makePath } from "../store/Node";
+import { visitNode, makePath, updateGrid } from "../store/Node";
 
 const Board = () => {
   const dispatch = useDispatch();
@@ -20,13 +20,12 @@ const Board = () => {
 
   const newGrid = grid.slice();
   const [localGrid, setLocalGrid] = useState(newGrid);
-  // console.log(localGrid);
 
   const { isMousePressed } = useSelector((state) => state.controls);
 
   const dijkstraHandler = () => {
     const { visited, result } = Dijkstra(
-      localGrid, // => global to local
+      grid, // => global to local
       START_NODE_ROW,
       START_NODE_COL,
       FINISH_NODE_ROW,
@@ -34,6 +33,7 @@ const Board = () => {
     );
 
     dispatch(makePath(result));
+    console.log(result);
     // dispatch(visitNode(visited));
   };
 
@@ -48,16 +48,13 @@ const Board = () => {
           <div key={rowIdx} className="grid-row">
             {row.map((node, nodeIdx) => {
               const { row, col } = node;
+
               return (
                 <Node
                   key={nodeIdx}
                   row={row}
                   col={col}
-                  localGrid={localGrid}
-                  setLocalGrid={setLocalGrid}
-                  // isFinish={isFinish}
-                  // isStart={isStart}
-                  // isWall={isWall}
+                  coordinate={[row, col]}
                 />
               );
             })}
