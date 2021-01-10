@@ -32,7 +32,12 @@ const Board = () => {
       FINISH_NODE_COL
     );
 
-    dispatch(makePath(result));
+    if (result.length === null || undefined) {
+      console.log("NO PATH FOUND");
+    } else {
+      dispatch(makePath(result));
+    }
+
     console.log(result);
     // dispatch(visitNode(visited));
   };
@@ -54,7 +59,7 @@ const Board = () => {
                   key={nodeIdx}
                   row={row}
                   col={col}
-                  coordinate={[row, col]}
+                  coordinate={[[row], [col]]}
                 />
               );
             })}

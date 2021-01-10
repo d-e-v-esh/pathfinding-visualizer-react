@@ -74,6 +74,15 @@ const nodesSlice = createSlice({
         state.grid[turnToWallRow][turnToWallCol].isWall = true;
       }
     },
+    breakMultipleWalls: (state, { payload }) => {
+      // const singleNode = state.grid[payload.row][payload.col];
+
+      for (let i = 0; i < payload.length; i++) {
+        const turnToWallRow = payload[i][0];
+        const turnToWallCol = payload[i][1];
+        state.grid[turnToWallRow][turnToWallCol].isWall = false;
+      }
+    },
     breakWall: (state, { payload }) => {
       const singleNode = state.grid[payload.row][payload.col];
       // Start and End nodes cannot be converted to walls
@@ -90,7 +99,12 @@ const nodesSlice = createSlice({
     },
 
     makePath: (state, { payload }) => {
-      // console.log(payload[i]); => This returns all the visited nodes in one array
+      // Here we are setting all the nodes.isPath to false.
+      // TODO: find a better way to do if performance issues arise
+      const flatGrid = state.grid.flat();
+      for (let i = 0; i < flatGrid.length; i++) {
+        flatGrid[i].isPath = false;
+      }
       for (let i = 0; i < payload.length; i++) {
         state.grid[payload[i].row][payload[i].col].isPath = true;
       }
@@ -105,6 +119,7 @@ export const {
   makePath,
   updateGrid,
   makeMultipleWalls,
+  breakMultipleWalls,
 } = nodesSlice.actions;
 
 export default nodesSlice.reducer;
