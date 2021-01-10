@@ -51,6 +51,7 @@ const Node = ({ col, row, coordinate }) => {
   const destroyWall = () => {
     if (!GLOBAL_NODE.isStart && !GLOBAL_NODE.isEnd && GLOBAL_NODE.isWall) {
       setWallClass(false);
+      deleteWalledNodes.push([row, col]);
     }
   };
 
@@ -60,9 +61,7 @@ const Node = ({ col, row, coordinate }) => {
       createWall();
     }
     if (wallClass) {
-      dispatch(breakWall({ row, col }));
-      setWallClass(false);
-      // destroyWall();
+      destroyWall();
     }
   };
 
@@ -71,8 +70,7 @@ const Node = ({ col, row, coordinate }) => {
       createWall();
     }
     if (isMousePressed && wallClass) {
-      setWallClass(false);
-      deleteWalledNodes.push([row, col]);
+      destroyWall();
     }
   };
 
