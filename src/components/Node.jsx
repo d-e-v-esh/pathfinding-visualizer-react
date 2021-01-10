@@ -26,62 +26,63 @@ import {
 } from "../store/Node";
 import { mousePressed, mouseNotPressed } from "../store/Controls";
 
-// Setting up Local Grid
-
-// TODO: Remove duplicates from this array tomorrow
+// TODO: Find a new data structure for the walledNodes that prevents duplicate values.
 let walledNodes = [];
 
-const Node = ({ col, row, coordinate }) => {
-  const { grid } = useSelector((state) => state.nodes);
-  const globalNode = grid[row][col];
-  // let makeWallClass = false;
-  const [wallClass, setWallClass] = useState(false);
-  const dispatch = useDispatch();
-  const { isMousePressed } = useSelector((state) => state.controls);
+let deleteWalledNodes = [];
 
-  const makeWallHandler = () => {
-    if (!globalNode.isStart && !globalNode.isEnd) {
+const Node = ({ col, row, coordinate }) => {
+  // Pulling from global state
+  const { grid } = useSelector((state) => state.nodes);
+  const { isMousePressed } = useSelector((state) => state.controls);
+  // Constants
+  const GLOBAL_NODE = grid[row][col];
+  const dispatch = useDispatch();
+  // Local State
+  const [wallClass, setWallClass] = useState(false);
+
+  const createWall = () => {
+    if (!GLOBAL_NODE.isStart && !GLOBAL_NODE.isEnd && !GLOBAL_NODE.isWall) {
       walledNodes.push([row, col]);
       setWallClass(true);
     }
-    // console.log("poggers");
   };
 
-  const breakWallHandler = () => {
-    // TODO: (1) remove all the nodes that were dis-walled from the walled nodes array, (2) turn setWallClass State to false
+  const destroyWall = () => {
+    if (!GLOBAL_NODE.isStart && !GLOBAL_NODE.isEnd && GLOBAL_NODE.isWall) {
+      setWallClass(false);
+    }
   };
-
-  // const handleRightClick = (e) => {
-  //   console.log("right click");
-  // };
 
   const handleMouseDown = (row, col) => {
     dispatch(mousePressed());
-    // if (!globalNode.isStart && !globalNode.isEnd) {
-    //   draggedWalls.push([row, col]);
-    //   setWallClass(true);
-    // }
-
-    makeWallHandler();
+    if (!wallClass) {
+      createWall();
+    }
+    if (wallClass) {
+      dispatch(breakWall({ row, col }));
+      setWallClass(false);
+      // destroyWall();
+    }
   };
 
   const handleMouseEnter = (row, col) => {
-    // console.log(makeWallClass);
-    // console.log([row, col]);
-    if (isMousePressed) {
-      if (!globalNode.isStart && !globalNode.isEnd) {
-        walledNodes.push([row, col]);
-        setWallClass(true);
-      }
+    if (isMousePressed && !wallClass) {
+      createWall();
     }
-    // console.log(makeWallClass);
-    // console.log(grid[row][col]);
+    if (isMousePressed && wallClass) {
+      setWallClass(false);
+      deleteWalledNodes.push([row, col]);
+    }
   };
 
   const handleMouseUp = () => {
     dispatch(mouseNotPressed());
 
     dispatch(makeMultipleWalls(walledNodes));
+    walledNodes = [];
+    dispatch(breakMultipleWalls(deleteWalledNodes));
+    deleteWalledNodes = [];
   };
 
   // const singleNode = localGrid[row][col];
@@ -89,13 +90,13 @@ const Node = ({ col, row, coordinate }) => {
 
   const extraClassName = wallClass
     ? "node-wall"
-    : globalNode.isStart
+    : GLOBAL_NODE.isStart
     ? "node-start"
-    : globalNode.isEnd
+    : GLOBAL_NODE.isEnd
     ? "node-end"
-    : globalNode.isVisited
+    : GLOBAL_NODE.isVisited
     ? "node-visited"
-    : globalNode.isPath
+    : GLOBAL_NODE.isPath
     ? "node-shortest-path"
     : "";
   return (
@@ -103,7 +104,9 @@ const Node = ({ col, row, coordinate }) => {
       id={`node-${row}-${col}`}
       className={`node ${extraClassName}`}
       onMouseDown={(e) => handleMouseDown(row, col)}
-      onContextMenu={(e) => e.preventDefault()}
+      onContextMenu={(e) => {
+        e.preventDefault();
+      }}
       onMouseEnter={(e) => handleMouseEnter(row, col)}
       onMouseUp={() => handleMouseUp()}></div>
   );
