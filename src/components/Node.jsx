@@ -24,6 +24,7 @@ import {
   setEndNode,
   moveStartNode,
   removeStartNode,
+  removeEndNode,
   moveEndNode,
 } from "../store/Node";
 import { mousePressed, mouseNotPressed } from "../store/Controls";
@@ -46,6 +47,7 @@ const Node = ({ col, row, coordinate }) => {
     FINISH_NODE_COL,
   } = useSelector((state) => state.nodes);
   const currentStartNode = { row: START_NODE_ROW, col: START_NODE_COL };
+  const currentEndNode = { row: FINISH_NODE_ROW, col: FINISH_NODE_COL };
   const { isMousePressed } = useSelector((state) => state.controls);
   // Constants
   const GLOBAL_NODE = grid[row][col];
@@ -69,10 +71,12 @@ const Node = ({ col, row, coordinate }) => {
 
   const handleMouseDown = (row, col) => {
     dispatch(mousePressed());
-    console.log(currentStartNode);
+    console.log(currentEndNode);
     if (GLOBAL_NODE.isStart) {
-      // dispatch(setStartNode({ row, col }));
       dispatch(moveStartNode(true));
+    }
+    if (GLOBAL_NODE.isEnd) {
+      dispatch(moveEndNode(true));
     }
 
     // Wall Portion
@@ -84,17 +88,12 @@ const Node = ({ col, row, coordinate }) => {
   };
 
   const handleMouseEnter = (row, col) => {
-    if (startNodeMoving && isMousePressed) {
-      // dispatch(setStartNode({ row, col }));
-      // Create a variable for startNOde
-    }
-
     // Wall Portion
-    else if (isMousePressed && !wallClass) {
-      createWall();
-    } else if (isMousePressed && wallClass) {
-      destroyWall();
-    }
+    // if (isMousePressed && !wallClass) {
+    //   createWall();
+    // } else if (isMousePressed && wallClass) {
+    //   destroyWall();
+    // }
   };
 
   const handleMouseLeave = () => {};
@@ -107,6 +106,11 @@ const Node = ({ col, row, coordinate }) => {
       // Before setting the new startNode, we need to delete the old one.
       dispatch(removeStartNode(currentStartNode));
       dispatch(setStartNode({ row, col }));
+    }
+    if (endNodeMoving) {
+      dispatch(moveEndNode(false));
+      dispatch(removeEndNode(currentEndNode));
+      dispatch(setEndNode({ row, col }));
     }
 
     // Wall Portion

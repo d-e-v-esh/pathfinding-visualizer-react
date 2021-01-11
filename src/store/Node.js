@@ -70,6 +70,10 @@ const nodesSlice = createSlice({
       const node = state.grid[payload.row][payload.col];
       node.isStart = false;
     },
+    removeEndNode: (state, { payload }) => {
+      const node = state.grid[payload.row][payload.col];
+      node.isEnd = false;
+    },
     setStartNode: (state, { payload }) => {
       const startNode = state.grid[payload.row][payload.col];
 
@@ -82,6 +86,7 @@ const nodesSlice = createSlice({
 
       state.FINISH_NODE_ROW = payload.row;
       state.FINISH_NODE_COL = payload.col;
+      endNode.isEnd = true;
     },
     makeWall: (state, { payload }) => {
       const singleNode = state.grid[payload.row][payload.col];
@@ -148,6 +153,7 @@ export const {
   moveStartNode,
   moveEndNode,
   removeStartNode,
+  removeEndNode,
 } = nodesSlice.actions;
 
 export default nodesSlice.reducer;
