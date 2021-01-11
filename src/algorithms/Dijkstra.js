@@ -1,9 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
 
-// export default function Dijkstra(nodes, startNode, endNode) {
-//   return basicAStar(nodes, startNode, endNode, dijkstraHeuristic);
-// }
-
 export const Dijkstra = (
   grid,
   START_NODE_ROW,
@@ -12,10 +8,11 @@ export const Dijkstra = (
   FINISH_NODE_COL
 ) => {
   // console.log(grid);
+
   const startNode = grid[START_NODE_ROW][START_NODE_COL];
   const endNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
 
-  // console.log(startNode, endNode);
+  console.log(startNode, endNode);
 
   const neighbors = (node1, node2) => {
     const xDistance = Math.abs(node1.row - node2.row);

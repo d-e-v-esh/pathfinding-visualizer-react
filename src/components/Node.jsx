@@ -8,66 +8,147 @@
 
 // If it lags even a little bit then we can put a small loading gif till the algorithm starts.
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import "../styles/Node.scss";
 
 // Redux
+
 import { useSelector, useDispatch } from "react-redux";
 
 // Importing Actions
-import { makeWall, breakWall } from "../store/Node";
+import {
+  makeMultipleWalls,
+  breakMultipleWalls,
+  setStartNode,
+  setEndNode,
+  moveStartNode,
+  removeStartNode,
+  removeEndNode,
+  moveEndNode,
+} from "../store/Node";
 import { mousePressed, mouseNotPressed } from "../store/Controls";
 
-const Node = ({ col, row }) => {
-  const dispatch = useDispatch();
+// TODO: Find a new data structure for the walledNodes that prevents duplicate values.
+let walledNodes = [];
 
-  const { grid } = useSelector((state) => state.nodes);
+let deleteWalledNodes = [];
+
+const Node = ({ col, row, coordinate }) => {
+  // Pulling from global state
+  const {
+    grid,
+
+    startNodeMoving,
+    endNodeMoving,
+    START_NODE_ROW,
+    START_NODE_COL,
+    FINISH_NODE_ROW,
+    FINISH_NODE_COL,
+  } = useSelector((state) => state.nodes);
+  const currentStartNode = { row: START_NODE_ROW, col: START_NODE_COL };
+  const currentEndNode = { row: FINISH_NODE_ROW, col: FINISH_NODE_COL };
   const { isMousePressed } = useSelector((state) => state.controls);
+  // Constants
+  const GLOBAL_NODE = grid[row][col];
+  const dispatch = useDispatch();
+  // Local State
+  const [wallClass, setWallClass] = useState(false);
 
-  // Mouse Handling Events
+  const createWall = () => {
+    if (!GLOBAL_NODE.isStart && !GLOBAL_NODE.isEnd && !GLOBAL_NODE.isWall) {
+      walledNodes.push([row, col]);
+      setWallClass(true);
+    }
+  };
+
+  const destroyWall = () => {
+    if (!GLOBAL_NODE.isStart && !GLOBAL_NODE.isEnd && GLOBAL_NODE.isWall) {
+      setWallClass(false);
+      deleteWalledNodes.push([row, col]);
+    }
+  };
 
   const handleMouseDown = (row, col) => {
     dispatch(mousePressed());
-    // console.log(row, col);
-    dispatch(makeWall({ row, col }));
+    console.log(currentEndNode);
+    if (GLOBAL_NODE.isStart) {
+      dispatch(moveStartNode(true));
+    }
+    if (GLOBAL_NODE.isEnd) {
+      dispatch(moveEndNode(true));
+    } else {
+      // Wall Portion
+      if (!wallClass) {
+        createWall();
+      } else if (wallClass) {
+        destroyWall();
+      }
+    }
   };
 
   const handleMouseEnter = (row, col) => {
-    if (isMousePressed) {
-      dispatch(makeWall({ row, col }));
-    }
-    if (!isMousePressed) {
-      // dispatch(mouseNotPressed());
+    if (startNodeMoving || endNodeMoving) {
+      // do something
+    } else {
+      // deal with walls
+      // Wall Portion
+      if (isMousePressed && !wallClass) {
+        createWall();
+      } else if (isMousePressed && wallClass) {
+        destroyWall();
+      }
     }
   };
+
+  const handleMouseLeave = () => {};
 
   const handleMouseUp = () => {
     dispatch(mouseNotPressed());
-  };
 
-  // console.log(grid);
-  const singleNode = grid[row][col];
+    if (startNodeMoving) {
+      dispatch(moveStartNode(false));
+      // Before setting the new startNode, we need to delete the old one.
+      dispatch(removeStartNode(currentStartNode));
+      dispatch(setStartNode({ row, col }));
+    }
+    if (endNodeMoving) {
+      dispatch(moveEndNode(false));
+      dispatch(removeEndNode(currentEndNode));
+      dispatch(setEndNode({ row, col }));
+    }
+
+    // Wall Portion
+    dispatch(makeMultipleWalls(walledNodes));
+    walledNodes = [];
+
+    dispatch(breakMultipleWalls(deleteWalledNodes));
+    deleteWalledNodes = [];
+  };
 
   // TODO: Refactor this part to rely on the state directly
 
-  const extraClassName = singleNode.isWall
+  const extraClassName = wallClass
     ? "node-wall"
-    : singleNode.isStart
+    : GLOBAL_NODE.isStart
     ? "node-start"
-    : singleNode.isEnd
+    : GLOBAL_NODE.isEnd
     ? "node-end"
-    : singleNode.isVisited
+    : GLOBAL_NODE.isVisited
     ? "node-visited"
-    : singleNode.isPath
+    : GLOBAL_NODE.isPath
     ? "node-shortest-path"
     : "";
   return (
     <div
       id={`node-${row}-${col}`}
       className={`node ${extraClassName}`}
-      onMouseDown={() => handleMouseDown(row, col)}
-      onMouseEnter={() => handleMouseEnter(row, col)}
+      onMouseDown={(e) => handleMouseDown(row, col)}
+      onContextMenu={(e) => {
+        e.preventDefault();
+      }}
+      onMouseLeave={() => handleMouseLeave()}
+      onMouseEnter={(e) => handleMouseEnter(row, col)}
       onMouseUp={() => handleMouseUp()}></div>
   );
 };
