@@ -77,23 +77,28 @@ const Node = ({ col, row, coordinate }) => {
     }
     if (GLOBAL_NODE.isEnd) {
       dispatch(moveEndNode(true));
+    } else {
+      // Wall Portion
+      if (!wallClass) {
+        createWall();
+      } else if (wallClass) {
+        destroyWall();
+      }
     }
-
-    // Wall Portion
-    // else if (!wallClass) {
-    //   createWall();
-    // } else if (wallClass) {
-    //   destroyWall();
-    // }
   };
 
   const handleMouseEnter = (row, col) => {
-    // Wall Portion
-    // if (isMousePressed && !wallClass) {
-    //   createWall();
-    // } else if (isMousePressed && wallClass) {
-    //   destroyWall();
-    // }
+    if (startNodeMoving || endNodeMoving) {
+      // do something
+    } else {
+      // deal with walls
+      // Wall Portion
+      if (isMousePressed && !wallClass) {
+        createWall();
+      } else if (isMousePressed && wallClass) {
+        destroyWall();
+      }
+    }
   };
 
   const handleMouseLeave = () => {};

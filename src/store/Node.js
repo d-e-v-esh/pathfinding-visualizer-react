@@ -79,6 +79,8 @@ const nodesSlice = createSlice({
 
       state.START_NODE_ROW = payload.row;
       state.START_NODE_COL = payload.col;
+      startNode.isWall = false;
+
       startNode.isStart = true;
     },
     setEndNode: (state, { payload }) => {
@@ -86,6 +88,7 @@ const nodesSlice = createSlice({
 
       state.FINISH_NODE_ROW = payload.row;
       state.FINISH_NODE_COL = payload.col;
+      endNode.isWall = false;
       endNode.isEnd = true;
     },
     makeWall: (state, { payload }) => {
