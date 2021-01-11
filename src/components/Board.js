@@ -18,14 +18,13 @@ const Board = () => {
     FINISH_NODE_COL,
   } = useSelector((state) => state.nodes);
 
-  const newGrid = grid.slice();
-  const [localGrid, setLocalGrid] = useState(newGrid);
-
   const { isMousePressed } = useSelector((state) => state.controls);
 
   const dijkstraHandler = () => {
+    // console.log([START_NODE_ROW, START_NODE_COL]);
+
     const { visited, result } = Dijkstra(
-      grid, // => global to local
+      grid,
       START_NODE_ROW,
       START_NODE_COL,
       FINISH_NODE_ROW,
@@ -38,7 +37,7 @@ const Board = () => {
       dispatch(makePath(result));
     }
 
-    console.log(result);
+    // console.log(result);
     // dispatch(visitNode(visited));
   };
 
@@ -47,7 +46,7 @@ const Board = () => {
       <button onClick={() => dijkstraHandler()}>
         Visualize Dijkstra's Algorithm
       </button>
-      {localGrid.map((row, rowIdx) => {
+      {grid.map((row, rowIdx) => {
         // => global to local
         return (
           <div key={rowIdx} className="grid-row">

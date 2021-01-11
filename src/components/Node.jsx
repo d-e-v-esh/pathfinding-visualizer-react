@@ -18,11 +18,13 @@ import { useSelector, useDispatch } from "react-redux";
 
 // Importing Actions
 import {
-  makeWall,
-  breakWall,
-  updateGrid,
   makeMultipleWalls,
   breakMultipleWalls,
+  setStartNode,
+  setEndNode,
+  moveStartNode,
+  removeStartNode,
+  moveEndNode,
 } from "../store/Node";
 import { mousePressed, mouseNotPressed } from "../store/Controls";
 
@@ -33,7 +35,17 @@ let deleteWalledNodes = [];
 
 const Node = ({ col, row, coordinate }) => {
   // Pulling from global state
-  const { grid } = useSelector((state) => state.nodes);
+  const {
+    grid,
+
+    startNodeMoving,
+    endNodeMoving,
+    START_NODE_ROW,
+    START_NODE_COL,
+    FINISH_NODE_ROW,
+    FINISH_NODE_COL,
+  } = useSelector((state) => state.nodes);
+  const currentStartNode = { row: START_NODE_ROW, col: START_NODE_COL };
   const { isMousePressed } = useSelector((state) => state.controls);
   // Constants
   const GLOBAL_NODE = grid[row][col];
@@ -57,33 +69,54 @@ const Node = ({ col, row, coordinate }) => {
 
   const handleMouseDown = (row, col) => {
     dispatch(mousePressed());
-    if (!wallClass) {
-      createWall();
+    console.log(currentStartNode);
+    if (GLOBAL_NODE.isStart) {
+      // dispatch(setStartNode({ row, col }));
+      dispatch(moveStartNode(true));
     }
-    if (wallClass) {
+
+    // Wall Portion
+    // else if (!wallClass) {
+    //   createWall();
+    // } else if (wallClass) {
+    //   destroyWall();
+    // }
+  };
+
+  const handleMouseEnter = (row, col) => {
+    if (startNodeMoving && isMousePressed) {
+      // dispatch(setStartNode({ row, col }));
+      // Create a variable for startNOde
+    }
+
+    // Wall Portion
+    else if (isMousePressed && !wallClass) {
+      createWall();
+    } else if (isMousePressed && wallClass) {
       destroyWall();
     }
   };
 
-  const handleMouseEnter = (row, col) => {
-    if (isMousePressed && !wallClass) {
-      createWall();
-    }
-    if (isMousePressed && wallClass) {
-      destroyWall();
-    }
-  };
+  const handleMouseLeave = () => {};
 
   const handleMouseUp = () => {
     dispatch(mouseNotPressed());
 
+    if (startNodeMoving) {
+      dispatch(moveStartNode(false));
+      // Before setting the new startNode, we need to delete the old one.
+      dispatch(removeStartNode(currentStartNode));
+      dispatch(setStartNode({ row, col }));
+    }
+
+    // Wall Portion
     dispatch(makeMultipleWalls(walledNodes));
     walledNodes = [];
+
     dispatch(breakMultipleWalls(deleteWalledNodes));
     deleteWalledNodes = [];
   };
 
-  // const singleNode = localGrid[row][col];
   // TODO: Refactor this part to rely on the state directly
 
   const extraClassName = wallClass
@@ -105,6 +138,7 @@ const Node = ({ col, row, coordinate }) => {
       onContextMenu={(e) => {
         e.preventDefault();
       }}
+      onMouseLeave={() => handleMouseLeave()}
       onMouseEnter={(e) => handleMouseEnter(row, col)}
       onMouseUp={() => handleMouseUp()}></div>
   );
