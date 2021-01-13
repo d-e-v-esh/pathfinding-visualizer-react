@@ -1,4 +1,4 @@
-# This app is incomplete and code does not work properly. Will work on this again in some days.
+# This app is incomplete and code does not work properly. Will work on this again in some days and update this.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
