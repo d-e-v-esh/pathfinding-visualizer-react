@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# This app is incomplete and code does not work properly. Will work on this again in some days.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
